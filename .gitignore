@@ -43,6 +43,7 @@ src/qt/forms/ui_*.h
 
 src/qt/test/moc*.cpp
 
+TAGS
 .deps
 .dirstamp
 .libs
@@ -113,3 +114,4 @@ qa/pull-tester/test.*/*
 /doc/doxygen/
 
 libbitcoinconsensus.pc
+

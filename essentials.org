@@ -1,0 +1,51 @@
+* building for development
+The basic build procedure for debug operation might look like this:
+./autogen.sh
+./configure --enable-debug
+make
+make check
+sudo make install
+
+If I want to change anything like the CXXFLAGS, those can be found in
+the src/configure.ac file.
+
+** other flags to try
+If I want to see a lot of warnings I can run with
+./configure CXXFLAGS="-g -ggdb -Wall -Wextra -Wfloat-equal -Winit-self -Wshadow -Wunreachable-code -pedantic -Wcast-align -Wcast-qual"
+
+There are other flags as well but I have no experimented with all of them:
+
+-Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith -Wbad-function-cast \
+-Wmissing-prototypes -Wstrict-prototypes -Wmissing-declarations -Winline -Wundef \
+-Wnested-externs -Wcast-qual -Wshadow -Wwrite-strings -Wno-unused-parameter \
+-Wfloat-equal -pedantic -ansi
+
+-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused
+
+
+* installation and use
+The install puts everything in /usr/local/bin/ 
+/usr/local/bin/bitcoind   = daemon
+/usr/local/bin/bitcoin-cli = comand line interface
+/usr/local/bin/bitcoin-tx
+/usr/local/bin/test_bitcoin
+/usr/local/bin/bitcoin-qt   = client
+/usr/local/bin/test_bitcoin-qt
+
+To run against the test net I will generally want to run the client with the command
+bitcoin-qt -testnet 
+or
+bitcoin-qt -regtest
+
+The daemaon program is essentially bitcoin-qt without a ui. Other functionality is the
+same when it daemon is running I can communicate with it using commands from
+bitcoin-cli, an example might be
+$ bitcoin-cli getconnectioncount
+The deamon has a slightly more involved setup see
+https://bitcoin.org/en/full-node#ubuntu-1410
+
+
+* testing
+To see some output, rather than summary information run as:
+./src/test/test_bitcoin --log_level=test_suite
+

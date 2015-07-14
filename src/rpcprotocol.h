@@ -14,6 +14,7 @@
 #include <boost/iostreams/stream.hpp>
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
+#include <boost/version.hpp>
 
 #include "univalue/univalue.h"
 

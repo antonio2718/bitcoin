@@ -58,7 +58,7 @@ const char* BIP71_MIMETYPE_PAYMENT = "application/bitcoin-payment";
 const char* BIP71_MIMETYPE_PAYMENTACK = "application/bitcoin-paymentack";
 const char* BIP71_MIMETYPE_PAYMENTREQUEST = "application/bitcoin-paymentrequest";
 // BIP70 max payment request size in bytes (DoS protection)
-const qint64 BIP70_MAX_PAYMENTREQUEST_SIZE = 50000;
+// extern const qint64 BIP70_MAX_PAYMENTREQUEST_SIZE = 50000;
 
 X509_STORE* PaymentServer::certStore = NULL;
 void PaymentServer::freeCertStore()

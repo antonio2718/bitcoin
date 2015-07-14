@@ -15,7 +15,7 @@ class CChainParams;
 class CReserveKey;
 class CScript;
 class CWallet;
-namespace Consensus { struct Params; };
+namespace Consensus { struct Params; }
 
 struct CBlockTemplate
 {

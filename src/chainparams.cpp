@@ -9,7 +9,7 @@
 #include "utilstrencodings.h"
 
 #include <assert.h>
-
+#include <boost/assign/list_inserter.hpp>
 #include <boost/assign/list_of.hpp>
 
 using namespace std;
@@ -104,8 +104,7 @@ public:
         fMineBlocksOnDemand = false;
         fTestnetToBeDeprecatedFieldRPC = false;
 
-        checkpointData = (Checkpoints::CCheckpointData) {
-            boost::assign::map_list_of
+		boost::assign::insert(checkpointData.mapCheckpoints)
             ( 11111, uint256S("0x0000000069e244f73d78e8fd29ba2fd2ed618bd6fa2ee92559f542fdb26e7c1d"))
             ( 33333, uint256S("0x000000002dd5588a74784eaa7ab0507a18ad16a236e7b1ce69f00d7ddfb5d0a6"))
             ( 74000, uint256S("0x0000000000573993a3c9e41ce34471c079dcf5f52a0e824a81e7f953b8661a20"))
@@ -118,12 +117,14 @@ public:
             (225430, uint256S("0x00000000000001c108384350f74090433e7fcf79a606b8e797f065b130575932"))
             (250000, uint256S("0x000000000000003887df1f29024b06fc2200b55f8af8f35453d7be294df2d214"))
             (279000, uint256S("0x0000000000000001ae8c72a0b0c301f67e3afca10e819efa9041e458e9bd7e40"))
-            (295000, uint256S("0x00000000000000004d9b4ef50f0f9d686fd69db2e03af35a100370c64632a983")),
-            1397080064, // * UNIX timestamp of last checkpoint block
-            36544669,   // * total number of transactions between genesis and last checkpoint
-                        //   (the tx=... number in the SetBestChain debug.log lines)
-            60000.0     // * estimated number of transactions per day after checkpoint
-        };
+            (295000, uint256S("0x00000000000000004d9b4ef50f0f9d686fd69db2e03af35a100370c64632a983"));
+		checkpointData.nTimeLastCheckpoint = 1397080064; // * UNIX timestamp of last checkpoint block
+		// * total number of transactions between genesis and last checkpoint
+		//   (the tx=... number in the SetBestChain debug.log lines)
+		checkpointData.nTransactionsLastCheckpoint = 36544669;   
+		// * estimated number of transactions per day after checkpoint
+		checkpointData.fTransactionsPerDay = 60000.0;     
+
     }
 };
 static CMainParams mainParams;
@@ -174,14 +175,11 @@ public:
         fMineBlocksOnDemand = false;
         fTestnetToBeDeprecatedFieldRPC = true;
 
-        checkpointData = (Checkpoints::CCheckpointData) {
-            boost::assign::map_list_of
-            ( 546, uint256S("000000002a936ca763904c3c35fce2f3556c559c0214345d31b1bcebf76acb70")),
-            1337966069,
-            1488,
-            300
-        };
-
+		boost::assign::insert(checkpointData.mapCheckpoints)
+            ( 546, uint256S("000000002a936ca763904c3c35fce2f3556c559c0214345d31b1bcebf76acb70"));
+		checkpointData.nTimeLastCheckpoint = 1337966069;
+		checkpointData.nTransactionsLastCheckpoint = 1488;
+		checkpointData.fTransactionsPerDay = 300;
     }
 };
 static CTestNetParams testNetParams;
@@ -219,13 +217,11 @@ public:
         fMineBlocksOnDemand = true;
         fTestnetToBeDeprecatedFieldRPC = false;
 
-        checkpointData = (Checkpoints::CCheckpointData){
-            boost::assign::map_list_of
-            ( 0, uint256S("0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206")),
-            0,
-            0,
-            0
-        };
+		boost::assign::insert(checkpointData.mapCheckpoints)
+            ( 0, uint256S("0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"));
+		checkpointData.nTimeLastCheckpoint = 0;
+		checkpointData.nTransactionsLastCheckpoint = 0;
+		checkpointData.fTransactionsPerDay = 0;
     }
 };
 static CRegTestParams regTestParams;

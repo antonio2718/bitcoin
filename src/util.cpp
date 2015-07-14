@@ -81,6 +81,7 @@
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/thread.hpp>
+#include <boost/version.hpp>
 #include <openssl/crypto.h>
 #include <openssl/rand.h>
 

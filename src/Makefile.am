@@ -96,6 +96,7 @@ BITCOIN_CORE_H = \
   core_io.h \
   eccryptoverify.h \
   ecwrapper.h \
+  floating_point_utils.h \
   hash.h \
   init.h \
   key.h \

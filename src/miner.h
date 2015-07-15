@@ -9,19 +9,36 @@
 #include "primitives/block.h"
 
 #include <stdint.h>
+#include "boost/tuple/tuple.hpp"
 
 class CBlockIndex;
 class CChainParams;
 class CReserveKey;
 class CScript;
 class CWallet;
-namespace Consensus { struct Params; }
-
-struct CBlockTemplate
+namespace Consensus
 {
+struct Params;
+}
+
+
+struct CBlockTemplate {
     CBlock block;
     std::vector<CAmount> vTxFees;
     std::vector<int64_t> vTxSigOps;
+};
+
+
+typedef boost::tuple<double, CFeeRate, const CTransaction*> TxPriority;
+
+class TxPriorityCompare
+{
+    bool byFee;
+
+public:
+    TxPriorityCompare(bool _byFee) : byFee(_byFee) {}
+
+    bool operator()(const TxPriority& a, const TxPriority& b);
 };
 
 /** Run the miner threads */

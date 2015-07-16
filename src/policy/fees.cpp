@@ -6,6 +6,7 @@
 #include "policy/fees.h"
 
 #include "amount.h"
+#include "floating_point_utils.h"
 #include "primitives/transaction.h"
 #include "streams.h"
 #include "txmempool.h"
@@ -152,7 +153,7 @@ double TxConfirmStats::EstimateMedianVal(int confTarget, double sufficientTxVal,
     for (unsigned int j = minBucket; j <= maxBucket; j++) {
         txSum += txCtAvg[j];
     }
-    if (foundAnswer && txSum != 0) {
+    if (foundAnswer && !bc::ulpsEquals(txSum, 0.0)) {
         txSum = txSum / 2;
         for (unsigned int j = minBucket; j <= maxBucket; j++) {
             if (txCtAvg[j] < txSum)
@@ -454,21 +455,21 @@ void CBlockPolicyEstimator::processBlock(unsigned int nBlockHeight,
     // were confirmed in 2 blocks and is "unlikely" if <50% were confirmed in 10 blocks
     LogPrint("estimatefee", "Blockpolicy recalculating dynamic cutoffs:\n");
     priLikely = priStats.EstimateMedianVal(2, SUFFICIENT_PRITXS, MIN_SUCCESS_PCT, true, nBlockHeight);
-    if (priLikely == -1)
+    if (bc::ulpsEquals(priLikely, -1.0))
         priLikely = INF_PRIORITY;
 
     double feeLikelyEst = feeStats.EstimateMedianVal(2, SUFFICIENT_FEETXS, MIN_SUCCESS_PCT, true, nBlockHeight);
-    if (feeLikelyEst == -1)
+    if (bc::ulpsEquals(feeLikelyEst, -1.0))
         feeLikely = CFeeRate(INF_FEERATE);
     else
         feeLikely = CFeeRate(feeLikelyEst);
 
     priUnlikely = priStats.EstimateMedianVal(10, SUFFICIENT_PRITXS, UNLIKELY_PCT, false, nBlockHeight);
-    if (priUnlikely == -1)
+    if (bc::ulpsEquals(priUnlikely, -1.0))
         priUnlikely = 0;
 
     double feeUnlikelyEst = feeStats.EstimateMedianVal(10, SUFFICIENT_FEETXS, UNLIKELY_PCT, false, nBlockHeight);
-    if (feeUnlikelyEst == -1)
+    if (bc::ulpsEquals(feeUnlikelyEst, -1.0))
         feeUnlikely = CFeeRate(0);
     else
         feeUnlikely = CFeeRate(feeUnlikelyEst);

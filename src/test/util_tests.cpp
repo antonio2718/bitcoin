@@ -5,6 +5,7 @@
 #include "util.h"
 
 #include "clientversion.h"
+#include "floating_point_utils.h"
 #include "primitives/transaction.h"
 #include "random.h"
 #include "sync.h"
@@ -372,14 +373,14 @@ BOOST_AUTO_TEST_CASE(test_ParseDouble)
     double n;
     // Valid values
     BOOST_CHECK(ParseDouble("1234", NULL));
-    BOOST_CHECK(ParseDouble("0", &n) && n == 0.0);
-    BOOST_CHECK(ParseDouble("1234", &n) && n == 1234.0);
-    BOOST_CHECK(ParseDouble("01234", &n) && n == 1234.0); // no octal
-    BOOST_CHECK(ParseDouble("2147483647", &n) && n == 2147483647.0);
-    BOOST_CHECK(ParseDouble("-2147483648", &n) && n == -2147483648.0);
-    BOOST_CHECK(ParseDouble("-1234", &n) && n == -1234.0);
-    BOOST_CHECK(ParseDouble("1e6", &n) && n == 1e6);
-    BOOST_CHECK(ParseDouble("-1e6", &n) && n == -1e6);
+    BOOST_CHECK(ParseDouble("0", &n) && bc::ulpsEquals(n, 0.0));
+    BOOST_CHECK(ParseDouble("1234", &n) && bc::ulpsEquals(n, 1234.0));
+    BOOST_CHECK(ParseDouble("01234", &n) && bc::ulpsEquals(n, 1234.0)); // no octal
+    BOOST_CHECK(ParseDouble("2147483647", &n) && bc::ulpsEquals(n, 2147483647.0));
+    BOOST_CHECK(ParseDouble("-2147483648", &n) && bc::ulpsEquals(n, -2147483648.0));
+    BOOST_CHECK(ParseDouble("-1234", &n) && bc::ulpsEquals(n, -1234.0));
+    BOOST_CHECK(ParseDouble("1e6", &n) && bc::ulpsEquals(n, 1e6));
+    BOOST_CHECK(ParseDouble("-1e6", &n) && bc::ulpsEquals(n, -1e6));
     // Invalid values
     BOOST_CHECK(!ParseDouble("", &n));
     BOOST_CHECK(!ParseDouble(" 1", &n)); // no padding inside

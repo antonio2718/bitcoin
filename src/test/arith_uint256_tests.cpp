@@ -10,6 +10,7 @@
 #include <cmath>
 #include "uint256.h"
 #include "arith_uint256.h"
+#include "floating_point_utils.h"
 #include <string>
 #include "version.h"
 #include "test/test_bitcoin.h"
@@ -397,15 +398,20 @@ BOOST_AUTO_TEST_CASE( methods ) // GetHex SetHex size() GetLow64 GetSerializeSiz
 
     for (unsigned int i = 0; i < 255; ++i)
     {
-        BOOST_CHECK((OneL << i).getdouble() == ldexp(1.0,i));
+		double a = (OneL << i).getdouble();
+		double b = ldexp(1.0,i);
+		BOOST_CHECK(bc::ulpsEquals(a, b));
     }
-    BOOST_CHECK(ZeroL.getdouble() == 0.0);
-    for (int i = 256; i > 53; --i)
+    BOOST_CHECK(bc::ulpsEquals(ZeroL.getdouble(), 0.0));
+    for (int i = 256; i > 53; --i) {
         BOOST_CHECK(almostEqual((R1L>>(256-i)).getdouble(), ldexp(R1Ldouble,i)));
+	}
     uint64_t R1L64part = (R1L>>192).GetLow64();
     for (int i = 53; i > 0; --i) // doubles can store all integers in {0,...,2^54-1} exactly
     {
-        BOOST_CHECK((R1L>>(256-i)).getdouble() == (double)(R1L64part >> (64-i)));
+		double a = (R1L>>(256-i)).getdouble();
+		double b = (double)(R1L64part >> (64-i));
+		BOOST_CHECK(bc::ulpsEquals(a, b));
     }
 }
 

@@ -2,6 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include "floating_point_utils.h"
 #include "serialize.h"
 #include "streams.h"
 #include "hash.h"
@@ -107,7 +108,8 @@ BOOST_AUTO_TEST_CASE(floats)
     for (int i = 0; i < 1000; i++) {
         float j;
         ss >> j;
-        BOOST_CHECK_MESSAGE(i == j, "decoded:" << j << " expected:" << i);
+		float k = i * 1.0;
+        BOOST_CHECK_MESSAGE(bc::ulpsEquals(k, j), "decoded:" << j << " expected:" << i);
     }
 }
 
@@ -124,7 +126,8 @@ BOOST_AUTO_TEST_CASE(doubles)
     for (int i = 0; i < 1000; i++) {
         double j;
         ss >> j;
-        BOOST_CHECK_MESSAGE(i == j, "decoded:" << j << " expected:" << i);
+		double k = i * 1.0;
+        BOOST_CHECK_MESSAGE(bc::ulpsEquals(k, j), "decoded:" << j << " expected:" << i);
     }
 }
 
